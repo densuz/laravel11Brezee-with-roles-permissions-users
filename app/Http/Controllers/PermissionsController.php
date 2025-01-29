@@ -12,7 +12,10 @@ class PermissionsController extends Controller
      */
     public function index()
     {
-        return view('permissions.index');
+        // $permissions = Permissions::select('permissions.*', 'description')->get();
+        $permissions = Permissions::select('id','permission_name', 'description')->get();
+
+        return view('permissions.index', ['permissions' => $permissions]);
     }
 
     /**

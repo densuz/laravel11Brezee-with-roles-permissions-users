@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Roles;
 use Illuminate\Http\Request;
 
 class RolesController extends Controller
@@ -11,7 +12,8 @@ class RolesController extends Controller
      */
     public function index()
     {
-        return view('Roles.index');
+        $roles = Roles::select('id','name','description')->get();
+        return view('Roles.index', ['roles' => $roles]);
     }
 
     /**
