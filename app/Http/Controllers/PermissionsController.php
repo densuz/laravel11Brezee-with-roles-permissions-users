@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Permissions;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class PermissionsController extends Controller
 {
@@ -12,14 +13,15 @@ class PermissionsController extends Controller
      */
     public function index()
     {
-        // $permissions = Permissions::select('permissions.*', 'description')->get();
-        $permissions = Permissions::select('id','permission_name', 'description')->get();
-
-        return view('permissions.index', ['permissions' => $permissions]);
+        $permissions = Cache::remember('permissions', 3600, function () {
+            return Permissions::select('id','permission_name', 'description')->get();
+        });
+    
+        return view('permissions.index', compact('permissions'));
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new resource
      */
     public function create()
     {

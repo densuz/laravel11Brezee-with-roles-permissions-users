@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Roles;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class RolesController extends Controller
 {
@@ -12,8 +13,11 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $roles = Roles::select('id','name','description')->get();
-        return view('Roles.index', ['roles' => $roles]);
+        $roles = Cache::remember('roles', 3600, function () {
+            return Roles::select('id','name', 'description')->get();
+        });
+    
+        return view('roles.index', compact('roles'));
     }
 
     /**
