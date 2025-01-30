@@ -13,10 +13,10 @@ class RolesController extends Controller
      */
     public function index()
     {
-        $roles = Cache::remember('roles', 3600, function () {
-            return Roles::select('id','name', 'description')->get();
+        $roles = Cache::remember('roles_page'. request('page', 1), 3600, function () {
+            return Roles::select('id','name', 'description')->paginate(50);
         });
-    
+        
         return view('roles.index', compact('roles'));
     }
 

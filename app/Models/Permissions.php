@@ -14,16 +14,15 @@ class Permissions extends Model
     protected $fillable = ['permission_name', 'description'];
     protected $dates = ['deleted_at'];
 
-
-    public function roles()
-    {
-        return $this->belongsToMany('App\Models\Roles');
-    }
-
     public function users()
     {
         return $this->belongsToMany(User::class, 'role_permissions_users')
             ->withPivot('role_id', 'description')
             ->withTimestamps();
+    }
+
+    public function roles()
+    {
+        return $this->belongsToMany(Roles::class, 'role_permissions_users', 'permission_id', 'role_id');
     }
 }

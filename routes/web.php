@@ -20,7 +20,8 @@ Route::get('/about', function () {
 
 
 Route::middleware('auth', 'verified')->group(function () {
-    Route::get('/users', [UsersController::class, 'index'])->name('users');
+    // Route::get('/users', [UsersController::class, 'index'])->name('users');
+    Route::resource('users', UsersController::class);
 
     // Roles
     Route::resource('/roles', RolesController::class);

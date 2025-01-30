@@ -5,44 +5,36 @@ namespace App\Models;
 use App\Models\User;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class Roles extends Model
 {
-    use SoftDeletes;
+    use HasFactory, SoftDeletes;
 
     protected $guarded = ['id'];
     protected $table = 'roles';
     protected $fillable = ['name', 'description'];
     public $timestamps = false;
     protected $dates = ['deleted_at'];
-    // public function users()
-    // {
-    //     return $this->belongsToMany('App\Models\User');
-    // }
 
     public function users()
     {
-        return $this->belongsToMany(User::class, 'role_permissions_users')
-        // return $this->belongsToMany(User::class)
-
-            ->withPivot('permission_id', 'description')
-            ->withTimestamps();
+        return $this->hasMany(User::class, 'role_id');
     }
 
+    
 
-    // public function permissions()
+    //  public function permissions()
     // {
-    //     return $this->belongsToMany('App\Models\Permissions');
+    //     return $this->belongsToMany(Permissions::class, 'role_permissions_users', 'role_id', 'permission_id')
+    //         // ->withTimestamps()
+    //         ->wherePivot('deleted_at', null);
     // }
 
     public function permissions()
-    {
-        return $this->belongsToMany(Permissions::class, 'role_permissions_users')
-        // return $this->belongsToMany(Permissions::class)
-
-            ->withPivot('user_id', 'description')
-            ->withTimestamps();
-    }
+{
+    return $this->belongsToMany(Permissions::class, 'role_permissions_users', 'role_id', 'permission_id');
+}
 
 
 
